@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { translateRaw } from 'v2/translations';
 import { Asset } from 'v2/types';
-import { AssetSummary, Divider, Dropdown } from 'v2/components';
+import { AssetDropdownItem, Divider, Dropdown } from 'v2/components';
 
 // Fixes weird placement issues for react-select
 const DropdownContainer = styled('div')`
@@ -21,7 +21,7 @@ class AssetOption extends React.PureComponent<OptionComponentProps> {
     const { ticker, name } = option;
     return (
       <>
-        <AssetSummary
+        <AssetDropdownItem
           symbol={ticker}
           name={name}
           onClick={() => onSelect!(option, null)}
@@ -54,7 +54,7 @@ function AssetDropdown({ assets, name, value, onSelect }: Props<Asset>) {
         optionComponent={AssetOption}
         value={value && value.ticker ? value : undefined}
         valueComponent={({ value: option }) => (
-          <AssetSummary symbol={option.ticker} name={option.name} />
+          <AssetDropdownItem symbol={option.ticker} name={option.name} />
         )}
       />
     </DropdownContainer>
