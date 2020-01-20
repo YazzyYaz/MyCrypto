@@ -159,8 +159,11 @@ const SendAssetsSchema = Yup.object().shape({
     .required(translateRaw('REQUIRED'))
 });
 
-export default function SendAssetsForm({ txConfig, onComplete }: IStepComponentProps) {
-  const { accounts, assets, networks, getAccount } = useContext(StoreContext);
+export default function SendAssetsForm({
+  txConfig,
+  onComplete
+}: IStepComponentProps) {
+  const { accounts, userAssets, networks, getAccount } = useContext(StoreContext);
   const { getAssetRate } = useContext(RatesContext);
   const [isEstimatingGasLimit, setIsEstimatingGasLimit] = useState(false); // Used to indicate that interface is currently estimating gas.
   const [isEstimatingNonce, setIsEstimatingNonce] = useState(false); // Used to indicate that interface is currently estimating gas.
@@ -270,8 +273,6 @@ export default function SendAssetsForm({ txConfig, onComplete }: IStepComponentP
             setFieldValue('nonceField', nonce.toString());
             setIsEstimatingNonce(false);
           };
-
-          const validAccounts = accounts.filter(account => account.wallet !== WalletId.VIEW_ONLY);
           const isValidAddress =
             !errors.address ||
             Object.values(errors.address).filter(e => e !== undefined).length === 0;
@@ -292,7 +293,7 @@ export default function SendAssetsForm({ txConfig, onComplete }: IStepComponentP
                   component={({ field, form }: FieldProps) => (
                     <AssetDropdown
                       selectedAsset={field.value}
-                      assets={assets(validAccounts)}
+                      assets={userAssets}
                       onSelect={(option: StoreAsset) => {
                         form.setFieldValue('asset', option || {}); //if this gets deleted, it no longer shows as selected on interface (find way to not need this)
                         //TODO get assetType onChange
@@ -306,7 +307,7 @@ export default function SendAssetsForm({ txConfig, onComplete }: IStepComponentP
                           form.setFieldValue('network', network || {});
                           if (network) {
                             setBaseAsset(
-                              getBaseAssetByNetwork({ network, assets: assets(validAccounts) }) ||
+                              getBaseAssetByNetwork({ network, assets: userAssets }) ||
                                 ({} as Asset)
                             );
                           }

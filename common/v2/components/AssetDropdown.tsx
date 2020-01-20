@@ -2,6 +2,7 @@
 import React from 'react';
 import { OptionComponentProps } from 'react-select';
 import styled from 'styled-components';
+import * as R from 'ramda';
 
 import { translateRaw } from 'v2/translations';
 import { Asset, TSymbol } from 'v2/types';
@@ -76,13 +77,6 @@ function AssetDropdown({
   fluid = false,
   label
 }: Props<Asset | { name: string; symbol: TSymbol }>) {
-  /* Removes duplicates and maps to format accepted by react-select */
-  //     assets
-  //       .filter(
-  //         (asset, index) => assets.map(assetObj => assetObj.uuid).indexOf(asset.uuid) >= index
-  //       )
-  //       .map(asset => ({ label: asset.name, id: asset.uuid, ...asset }))
-
   return (
     <DropdownContainer fluid={fluid}>
       {label && <Label>{label}</Label>}
@@ -93,7 +87,7 @@ function AssetDropdown({
         searchable={searchable}
         onChange={(option: Asset) => onSelect && onSelect(option)}
         optionComponent={showOnlyTicker ? AssetOptionShort : AssetOption}
-        value={selectedAsset && selectedAsset}
+        value={!R.isEmpty(selectedAsset) && selectedAsset}
         valueComponent={({ value: option }) => {
           const { ticker, symbol, name } = option;
           const ref = ticker ? ticker : symbol;
