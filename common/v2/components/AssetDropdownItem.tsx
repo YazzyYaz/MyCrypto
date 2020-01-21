@@ -20,7 +20,7 @@ function AssetDropdownItem({ symbol, name, onClick, selectable = false }: Props)
   return (
     <SContainer {...(onClick ? { onPointerDown: onClick } : null)} selectable={selectable}>
       <AssetIcon symbol={symbol} size={'1.5rem'} />
-      <div style={{ marginLeft: '6px', display: 'flex', alignItems: 'center' }}>
+      <div style={{ marginLeft: '10px', display: 'flex', alignItems: 'center' }}>
         <Typography bold={true} value={symbol} />
         {name && <span style={{ padding: '0px 6px' }}>-</span>}
         <Typography value={name} />
